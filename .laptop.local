@@ -1,0 +1,43 @@
+#!/bin/sh
+
+brew bundle --file=- <<EOF
+brew "Caskroom/cask/dockertoolbox"
+brew "go"
+brew "ngrok"
+brew "watch"
+brew "mysql56", restart_service: true
+brew "tig"
+brew "Caskroom/cask/google-chrome"
+brew "Caskroom/cask/google-drive"
+brew "Caskroom/cask/dropbox"
+brew "Caskroom/cask/hipchat"
+brew "Caskroom/cask/spotify"
+brew "Caskroom/cask/sequel-pro"
+EOF
+
+
+default_docker_machine() {
+  docker-machine ls | grep -Fq "default"
+}
+
+if ! default_docker_machine; then
+  docker-machine create --driver virtualbox default
+fi
+
+default_docker_machine_running() {
+  default_docker_machine | grep -Fq "Running"
+}
+
+if ! default_docker_machine_running; then
+  docker-machine start default
+fi
+
+fancy_echo "Cleaning up old Homebrew formulae ..."
+brew cleanup
+brew cask cleanup
+
+if [ -r "$HOME/.rcrc" ]; then
+  fancy_echo "Updating dotfiles ..."
+  rcup
+fi
+
