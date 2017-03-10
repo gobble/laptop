@@ -1,20 +1,18 @@
 #!/bin/sh
 
 brew bundle --file=- <<EOF
-brew "Caskroom/cask/dockertoolbox"
 brew "go"
-brew "ngrok"
 brew "watch"
 brew "mysql56", restart_service: true
 brew "tig"
-brew "Caskroom/cask/google-chrome"
-brew "Caskroom/cask/google-drive"
-brew "Caskroom/cask/dropbox"
-brew "Caskroom/cask/hipchat"
-brew "Caskroom/cask/spotify"
-brew "Caskroom/cask/sequel-pro"
+cask "google-chrome"
+cask "google-drive"
+cask "dropbox"
+cask "hipchat"
+cask "spotify"
+cask "sequel-pro"
+cask "docker-toolbox"
 EOF
-
 
 default_docker_machine() {
   docker-machine ls | grep -Fq "default"
